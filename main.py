@@ -1,14 +1,29 @@
+'''
+BUG:
+1. Some artists are not found corrently (i.e. WOODZ is not the most popular artist with the
+   word 'woodz' in his name).
+'''
+
 import os
 import sys
 from dotenv import load_dotenv
+from datetime import datetime
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from collections import Counter
 
 def playlist_exists(playlist_name, user_playlists):
   for playlist in user_playlists['items']:
     if playlist['name'] == playlist_name:
       return True
   
+  return False
+
+def isVariousArtists(i, artist_albums):
+  for artist in artist_albums[i]['artists']:
+    if artist['name'] == 'Various Artists':
+      return True
+
   return False
 
 def main():
@@ -25,7 +40,8 @@ def main():
                                     redirect_uri=ruri, scope=scope))
   
   # Get current user's playlists.
-  user_id = sp.me()['id']
+  user = sp.me()
+  user_id = user['id']
   user_playlists = sp.user_playlists(user_id)
   
   # Create a new playlist if a playlist with the same name doesn't already exist.
@@ -64,24 +80,50 @@ def main():
     # Remove any leading/trailing whitespace from artist name before adding to the file.
     artists.write(artist.strip() + '\n')
   
-  # Create list of IDs and names of artists and their corresponding track IDs 
-  # currently in playlist.
-  current_artists = []
-  playlist_tracks = sp.playlist_tracks(playlist_id)['items']
-  for track in playlist_tracks:
-    for artist in track['track']['artists']:
-      current_artists.append([artist['name'], artist['id']])
-      current_artists[-1].append(track['track']['id'])
+  artists.close()
   
-  # Add each artist's most recent release into the playlist. If adding a track from an
-  # artists that already has a track in the playlist, first remove that previous track.
-  for artist in artists.readlines():
-    for current_artist in current_artists:
-      if artist.lower() == current_artist.lower():
-        pass
+  # Replace items currently in playlist with the most recent releases from each artist.
+  new_tracks = []
+  with open("artists.txt", "r") as tracked_artists:
+    for tracked_artist in tracked_artists:
+      query_results = sp.search(tracked_artist, 10, 0, 'artist', user['country'])['artists']['items']
+      
+      # This assumes the user is looking for the artist with the given name that is the
+      # most popular and has the most followers.
+      query_results.sort(key = lambda i: (i['popularity'], i['followers']['total']), reverse = True)
+      
+      # Get artist most recent release (can be a single, album, or feature).
+      artist_id = query_results[0]['id']
+      artist_albums = sp.artist_albums(artist_id, 'album,single,appears_on', user['country'], 50)['items']
+      artist_albums.sort(key=lambda i: datetime.strptime(i['release_date'], '%Y-%m-%d'), reverse = True)
+      
+      # Adjust for two things:
+      # 1. Sometimes an artist has a release date that is in the future
+      # 2. Ignores releases on playlists from 'Various Artists', as there are often movie/show
+      #    soundtracks.
+      i = 0
+      
+      present = datetime.now()
+      while isVariousArtists(i, artist_albums) or \
+            present < datetime(int(artist_albums[i]['release_date'][0:4]), 
+                               int(artist_albums[i]['release_date'][5:7]),
+                               int(artist_albums[i]['release_date'][8:])):
+        i += 1
+        
+      recent_release = artist_albums[i]['id']
+      
+      # Store new artist releases in new tracks list
+      for track in sp.album_tracks(recent_release, market=user['country'])['items']:
+        for artist in track['artists']:
+          if artist['name'].lower().strip() == tracked_artist.lower().strip():
+            new_tracks.append(track['id'])
+            break
+  
+  # Update playlist.
+  sp.playlist_replace_items(playlist_id, new_tracks)
   
   # Close the file.
-  artists.close()
+  tracked_artists.close()
 
 if __name__ == "__main__":
     main()
