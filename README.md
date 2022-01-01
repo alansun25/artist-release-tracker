@@ -1,4 +1,4 @@
-# artist-release-tracker
+# Spotify Artist Radar
 
 **Work in progress.**
 
