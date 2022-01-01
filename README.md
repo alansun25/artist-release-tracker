@@ -10,7 +10,7 @@
 - Run the script in the cloud so it doesn't need to be manually run to update the playlist.
 
 ## Bugs:
-- Some artists are not found corrently due to how the fact that I identify artists based on artist name, popularity, and follower numbers (i.e. WOODZ is not the most popular artist with the word 'woodz' in his name).
+- Some artists are not found corrently due to how I identify artists based on artist name, popularity, and follower numbers (i.e. WOODZ is not the most popular artist with the word 'woodz' in his name).
 
 ## Tools: 
 - Python
