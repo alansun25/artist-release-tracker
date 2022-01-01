@@ -19,13 +19,12 @@ def main():
   ruri = os.environ.get('SPOTIPY_REDIRECT_URI')
   scope = os.environ.get('SPOTIPY_SCOPE')
 
-  # Create Spotify API Client
-  sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=id,
-                                                client_secret=secret,
-                                                redirect_uri=ruri,
-                                                scope=scope))
+  # Create Spotify API Client.
+  sp = spotipy.Spotify(auth_manager=
+                       SpotifyOAuth(client_id=id, client_secret=secret,
+                                    redirect_uri=ruri, scope=scope))
   
-  # Get current user's playlists
+  # Get current user's playlists.
   user_id = sp.me()['id']
   user_playlists = sp.user_playlists(user_id)
   
@@ -44,7 +43,7 @@ def main():
         if playlist['name'] == playlist_name:
           playlist_id = playlist['id']
     else:
-      print("Please re-run the script and try again!")
+      print("Please re-run the script and try again with a different playlist name.")
       sys.exit()
   else:
     playlist_desc = input("Enter a description for your playlist:\n")
@@ -52,27 +51,37 @@ def main():
         user_id, playlist_name, False, False, playlist_desc)
     playlist_id = playlist['id']
   
-  # Prompt the user which artists for which they would like to track new releases
-  artists = []
+  # Create file to store artists user wants to track (data persistence).
+  artists = open('artists.txt', 'a+')
   
+  # Prompt the user to provide artists for which they would like to track new releases.
   while True:
     artist = input('Name of an artist you would like to track (type "exit" when done):\n')
     
     if artist == 'exit':
       break
     
-    artists.append(artist)
+    # Remove any leading/trailing whitespace from artist name before adding to the file.
+    artists.write(artist.strip() + '\n')
   
-  # Remove any leading/trailing whitespace from each artist's name
-  for i in range(len(artists)):
-    artists[i] = artists[i].strip()
-    
-  '''
-  TODO:
-  1. Add data persistence for artists to track.
-  2. Add each artist's most recent release into the playlist. If adding a track from an
-     artists that already has a track in the playlist, first remove that previous track.
-  '''
+  # Create list of IDs and names of artists and their corresponding track IDs 
+  # currently in playlist.
+  current_artists = []
+  playlist_tracks = sp.playlist_tracks(playlist_id)['items']
+  for track in playlist_tracks:
+    for artist in track['track']['artists']:
+      current_artists.append([artist['name'], artist['id']])
+      current_artists[-1].append(track['track']['id'])
+  
+  # Add each artist's most recent release into the playlist. If adding a track from an
+  # artists that already has a track in the playlist, first remove that previous track.
+  for artist in artists.readlines():
+    for current_artist in current_artists:
+      if artist.lower() == current_artist.lower():
+        pass
+  
+  # Close the file.
+  artists.close()
 
 if __name__ == "__main__":
     main()
