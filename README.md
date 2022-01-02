@@ -6,7 +6,9 @@
 - Requires user to have a Spotify Client ID, Client Secret, Redirect URI, and defined scope (environment variables).
 
 ## Todo:
-- Allow users to use this without needing Client ID, Secret, etc.
+- Allow users to use this without needing Client ID, Secret, etc. (figure out authorization flow).
+- Output new songs added after running the script.
+- Modularize (?) the code.
 - Run the script in the cloud so it doesn't need to be manually run to update the playlist.
 
 ## Bugs:
