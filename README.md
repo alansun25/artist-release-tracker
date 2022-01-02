@@ -8,7 +8,8 @@
 ## Todo:
 - Allow users to use this without needing Client ID, Secret, etc. (figure out authorization flow).
 - Output new songs added after running the script.
-- Modularize (?) the code.
+- Modularize the code.
+- Create a simple Github pages website for the redirect URI.
 - Run the script in the cloud so it doesn't need to be manually run to update the playlist.
 
 ## Bugs:
