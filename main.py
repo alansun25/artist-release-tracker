@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 from datetime import datetime
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from collections import Counter
 
 def playlist_exists(playlist_name, user_playlists):
   for playlist in user_playlists['items']:
