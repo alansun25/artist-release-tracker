@@ -5,6 +5,8 @@
 - Ignores tracks from collections made by "Various Artists", i.e. movie soundtracks.
 
 ## Todo:
+- Provide a way to remove artists from tracked artist list.
+- Make it so that if user enters name of an artist that is already on their tracked list, don't add it again.
 - Output new songs added after running the script.
 - Modularize the code.
 - If there are multiple "popular" artists, show them along with their genre to the user and prompt the user to select one.
