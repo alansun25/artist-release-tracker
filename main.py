@@ -46,38 +46,44 @@ def main():
   # Create a new playlist if a playlist with the same name doesn't already exist.
   # If the playlist already exists, ask the user if they would like to use that
   # existing playlist.
-  playlist_name = input("Enter the name of your new playlist:\n")
+  playlist_name = input("Enter the name of your new playlist or an existing playlist (case sensitive):\n")
  
   if playlist_exists(playlist_name, user_playlists):
-    print('Playlist named', '"' + playlist_name + '"', 'already exists.')
-    prompt = input('Would you like to use the existing playlist? (y/n): ')
-    prompt = prompt.lower()
+    # print('Playlist named', '"' + playlist_name + '"', 'already exists.')
+    # prompt = input('Would you like to use the existing playlist? (y/n): ')
+    # prompt = prompt.lower()
     
-    if prompt == 'y':
-      for playlist in user_playlists['items']:
-        if playlist['name'] == playlist_name:
-          playlist_id = playlist['id']
-    else:
-      print("Please re-run the script and try again with a different playlist name.")
-      sys.exit()
+    # if prompt == 'y':
+    for playlist in user_playlists['items']:
+      if playlist['name'] == playlist_name:
+        playlist_id = playlist['id']
+    # else:
+    #   print("Please re-run the script and try again with a different playlist name.")
+    #   sys.exit()
   else:
-    playlist_desc = input("Enter a description for your playlist:\n")
+    playlist_desc = input("Enter a description for your new playlist:\n")
     playlist = sp.user_playlist_create(
         user_id, playlist_name, False, False, playlist_desc)
     playlist_id = playlist['id']
   
   # Create file to store artists user wants to track (data persistence).
-  artists = open('artists.txt', 'a+')
+  artists = open('./artists.txt', 'r+')
+  existing_artists = artists.readlines()
+  print(existing_artists)
   
-  # Prompt the user to provide artists for which they would like to track new releases.
   while True:
+    # Prompt the user to provide artists for which they would like to track new releases.
     artist = input('Name of an artist you would like to track (type "exit" when done):\n')
     
     if artist == 'exit':
       break
     
     # Remove any leading/trailing whitespace from artist name before adding to the file.
-    artists.write(artist.strip() + '\n')
+    artist = artist.lower().strip()
+    
+    # Check that the artist is not already in the user's list of tracked artists.
+    if artist not in existing_artists:
+      artists.write(artist + '\n')
   
   artists.close()
   
@@ -98,7 +104,7 @@ def main():
       
       # Adjust for two things:
       # 1. Sometimes an artist has a release date that is in the future
-      # 2. Ignores releases on playlists from 'Various Artists', as there are often movie/show
+      # 2. Ignores releases on playlists from 'Various Artists', as they are often movie/show
       #    soundtracks.
       i = 0
       
