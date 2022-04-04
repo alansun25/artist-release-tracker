@@ -7,7 +7,7 @@
 ## Todo:
 - [ ] If there are multiple "popular" artists, show them along with their genre to the user and prompt the user to select one.
 - [ ] Provide a way to remove artists from tracked artist list.
-- [ ] Make it so that if user enters name of an artist that is already on their tracked list, don't add it again.
+- [X] Make it so that if user enters name of an artist that is already on their tracked list, don't add it again.
 - [ ] Output new songs added after running the script.
 - [ ] Modularize the code.
 - [ ] Create a simple Github pages website for the redirect URI.
