@@ -7,6 +7,7 @@
 ## Todo:
 - [ ] If there are multiple "popular" artists, show them along with their genre to the user and prompt the user to select one.
 - [ ] Provide a way to remove artists from tracked artist list.
+- [ ] Make description auto-update with date of most recent update.
 - [X] Make it so that if user enters name of an artist that is already on their tracked list, don't add it again.
 - [ ] Output new songs added after running the script.
 - [ ] Modularize the code.
