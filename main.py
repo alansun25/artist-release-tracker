@@ -1,9 +1,3 @@
-'''
-BUG:
-1. Some artists are not found corrently (i.e. WOODZ is not the most popular artist with the
-   word 'woodz' in his name).
-'''
-
 import os
 import sys
 from dotenv import load_dotenv
