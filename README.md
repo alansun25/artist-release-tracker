@@ -5,19 +5,18 @@
 - Ignores tracks from collections made by "Various Artists", i.e. movie soundtracks.
 
 ## Todo:
-- [ ] If there are multiple "popular" artists, show them along with their genre to the user and prompt the user to select one.
+- [X] Allow the user to select from a list of artists after searching for one.
 - [ ] Make description auto-update with date of most recent update.
-- [X] Make it so that if user enters name of an artist that is already on their tracked list, don't add it again.
-- [ ] Output new songs added after running the script.
-- [ ] Modularize the code.
+- [X] If user enters name of an artist that is already on their tracked list, don't add it again.
+- [X] Make code be able to create multiple text files, one for each playlist the user creates. 
 - [ ] Create a simple Github pages website for the redirect URI.
 - [ ] Run the script in the cloud so it doesn't need to be manually run to update the playlist.
 - [ ] Provide a way to remove artists from tracked artist list (in the web app version eventually).
-
-## Bugs:
-- Some artists are not found corrently due to how I identify artists based on artist name, popularity, and follower numbers (i.e. WOODZ is not the most popular artist with the word 'woodz' in his name). Hopefully this can be solved with the 1st bullet point in *Todo*.
 
 ## Tools: 
 - Python
 - Spotify Web API
 - spotipy
+
+## Future
+- Flask web app that will let anyone use this script with a simple UI.
