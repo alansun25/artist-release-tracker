@@ -52,7 +52,7 @@ def main():
   
   # Create file to store artists user wants to track (data persistence).
   file = f'./{playlist_name.replace(" ", "-")}.txt'
-  artists = open(file, 'w+')
+  artists = open(file, 'r+')
   existing_artists = artists.readlines()
   print(existing_artists)
   
