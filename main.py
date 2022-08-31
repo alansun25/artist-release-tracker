@@ -1,23 +1,15 @@
-import os
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from artist_radar import ArtistRadar
 from dotenv import load_dotenv
+from spotify import initialize_spotify_client
+from firebase import initialize_firebase_db
+from artist_radar import ArtistRadar
 
 def main():
   load_dotenv()
 
-  # Get OAuth credentials
-  id = os.environ.get('SPOTIPY_CLIENT_ID')
-  secret = os.environ.get('SPOTIPY_CLIENT_SECRET')
-  r_uri = os.environ.get('SPOTIPY_REDIRECT_URI')
-  scope = os.environ.get('SPOTIPY_SCOPE')
-
-  # Create Spotify API Client.
-  sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=id, client_secret=secret,
-                                                 redirect_uri=r_uri, scope=scope))
+  sp = initialize_spotify_client()
+  db = initialize_firebase_db()
   
-  artist_radar = ArtistRadar(sp)
+  artist_radar = ArtistRadar(sp, db)
   artist_radar.create_playlist()
 
 if __name__ == '__main__':

@@ -1,14 +1,15 @@
 import os
 import spotipy
 from datetime import datetime
-from firebase import users_collection
 
 class ArtistRadar:
-  def __init__(self, sp: spotipy.Spotify):
+  def __init__(self, sp: spotipy.Spotify, db):
     self.sp = sp
     self.user = self.sp.me()
     self.user_playlists = self.sp.user_playlists(self.user['id'])
-    self.user_doc = users_collection.document(self.user['id'])
+    
+    self.db = db
+    self.user_doc = db.collection('users').document(self.user['id'])
   
   def create_playlist(self):
     '''

@@ -2,4 +2,5 @@
 .cache
 *.txt
 __pycache__/
+app_key/
 model.json
