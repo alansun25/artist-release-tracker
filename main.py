@@ -1,8 +1,8 @@
 import os
-from dotenv import load_dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from artist_radar import ArtistRadar
+from dotenv import load_dotenv
 
 def main():
   load_dotenv()

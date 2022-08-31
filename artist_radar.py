@@ -1,14 +1,14 @@
 import os
-from dotenv import load_dotenv
-from datetime import datetime
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from datetime import datetime
+from firebase import users_collection
 
 class ArtistRadar:
   def __init__(self, sp: spotipy.Spotify):
     self.sp = sp
     self.user = self.sp.me()
     self.user_playlists = self.sp.user_playlists(self.user['id'])
+    self.user_doc = users_collection.document(self.user['id'])
   
   def create_playlist(self):
     '''

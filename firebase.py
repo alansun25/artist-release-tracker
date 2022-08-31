@@ -3,3 +3,5 @@ from firebase_admin import firestore
 
 app = firebase_admin.initialize_app()
 db = firestore.client()
+
+users_collection = db.collection('users')
