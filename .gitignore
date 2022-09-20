@@ -4,3 +4,4 @@
 __pycache__/
 app_key/
 model.json
+venv/
