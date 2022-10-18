@@ -14,3 +14,5 @@
 - Firebase
 - Spotify Web API
 - spotipy
+- Svelte
+- TypeScript
