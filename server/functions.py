@@ -1,5 +1,6 @@
 import jsonpickle
 import os
+import spotipy
 from dotenv import load_dotenv, find_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -36,3 +37,6 @@ def check_refresh_token(token):
 
 def to_json(obj):
     return jsonpickle.encode(obj)
+
+def to_object(json) -> spotipy.Spotify:
+    return jsonpickle.decode(json)

@@ -2,18 +2,20 @@ import os
 import spotipy
 import time
 from flask import Flask, redirect, request, send_from_directory, session
-from functions import get_auth_url, get_token_data, to_json
+from functions import get_auth_url, get_token_data, to_json, to_object
 
 app = Flask(__name__)
 app.config.update(SECRET_KEY=os.urandom(24))
 
 @app.route("/")
 def root():
-    # if 'access_token' not in session:
-    #     return redirect('/authorize')
-
-    # return "<p>Hello, World!</p>"    
+    if 'access_token' not in session:
+        return redirect('/authorize')
     return send_from_directory('../client/dist', 'index.html')
+
+@app.route("/<path:path>")
+def assets(path):
+    return send_from_directory('../client/dist', path)
 
 @app.route('/authorize')
 def authorize():
@@ -35,9 +37,17 @@ def callback():
     
     return redirect('/')
 
-@app.route("/<path:path>")
-def assets(path):
-    return send_from_directory('../client/dist', path)
+@app.route('/user', methods=['GET'])
+def user():
+    sp = to_object(session['spotify'])
+    user = sp.current_user()
+    return user['id']
 
+@app.route('/playlists', methods=['GET'])
+def playlists():
+    sp = to_object(session['spotify'])
+    playlists = sp.current_user_playlists()
+    return {'playlists': playlists}
+    
 if __name__ == "__main__":
     app.run(debug=True)
