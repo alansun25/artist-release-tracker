@@ -6,7 +6,7 @@ from models.radar_playlist import RadarPlaylist
 class ArtistRadar:
     def __init__(self, sp: spotipy.Spotify, db):
         self.sp = sp
-        self.user = self.sp.me()
+        self.user = self.sp.current_user()
         self.user_playlists = self.sp.user_playlists(self.user["id"])
 
         self.db = db
