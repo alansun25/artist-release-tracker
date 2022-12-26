@@ -1,6 +1,6 @@
 # Spotify Artist Radar
 
-*This project is in active development and is subject to change.*
+*This project is in active development and subject to change.*
 
 ## Current Features
 - Creates and populates a playlist with each specified artist's most recent single, album, or feature when you run `main.py` (in the `server` folder).
@@ -9,16 +9,14 @@
 - If user enters name of an artist that is already on their tracked list, don't add the name again.
 - Playlist name, ID, and tracked artists stored in a Firebase database.
 
-## Goals
-- Build something for personal use.
-- Become fluent in usage of Spotify Web API with Python and spotipy.
-- Learn Svelte and Firebase.
-- Work through [issues](https://github.com/alansun25/spotify-artist-radar/issues).
+## Learnings
+- How to build an API and server with Flask, and serve a Svelte client on it.
+- Working with access tokens and refresh tokens in OAuth2.
+- Making my server read and write data from a Firebase DB.
+- It's fun and rewarding to build something for personal use.
 
 ## Tools
 - Python
+- Flask
 - Firebase
-- Spotify Web API
-- spotipy
 - Svelte
-- TypeScript
