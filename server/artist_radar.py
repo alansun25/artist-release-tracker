@@ -1,16 +1,69 @@
 import spotipy
 from datetime import datetime
+from models.artist import Artist
 from models.radar_playlist import RadarPlaylist
 
 
 class ArtistRadar:
-    def __init__(self, sp: spotipy.Spotify, db):
-        self.sp = sp
+    def __init__(self, access_token, db):
+        self.sp = spotipy.Spotify(access_token)
         self.user = self.sp.current_user()
         self.user_playlists = self.sp.user_playlists(self.user["id"])
-
-        self.db = db
+        
+        self.tracked_artists = []
+        
         self.user_doc = db.collection("users").document(self.user["id"])
+        doc = self.user_doc.get()
+        if doc.exists:
+            self.radar_playlist = RadarPlaylist.from_dict(self.user_doc.get().to_dict())
+            
+            # If the user deleted the playlist at some point, 
+            # recreate it and rewrite the old data
+            if not self.playlist_exists(self.radar_playlist.id):
+                self.create_radar_playlist()
+            else:
+                self.tracked_artists = self.radar_playlist.tracked_artists_ids
+        else:
+            self.radar_playlist = None
+            self.create_radar_playlist()    
+    
+    def create_radar_playlist(self):
+        name = "Spotify Artist Radar"
+        count = 1
+        while self.playlist_name_taken(name):
+            name = f"Spotify Artist Radar {count}"
+            count += 1
+        desc = "Newest releases from your selected artists."
+        
+        self.radar_playlist = self.sp.user_playlist_create(
+            self.user["id"], name, False, False, desc
+        )
+        
+        playlist_data = RadarPlaylist(self.radar_playlist["id"], name, [])
+        self.user_doc.set(playlist_data.to_dict())
+    
+    def search_artist(self, artist_name):
+        search_results = self.sp.search(
+            artist_name, 50, 0, "artist", self.user["country"]
+        )["artists"]["items"]
+
+        # Sort by artist popularity first and then total follower count (most to least).
+        search_results.sort(
+            key=lambda i: (i["popularity"], i["followers"]["total"]), reverse=True
+        )
+        
+        artists = []
+        for res in search_results:
+            artists.append(Artist(res["id"], res["name"], res["images"][0]))
+        
+        return artists
+    
+    def playlist_exists(self, playlist_id):
+        for playlist in self.user_playlists["items"]:
+            if playlist["id"] == playlist_id:
+                return True
+
+        return False
 
     def create_playlist(self):
         """
@@ -21,7 +74,7 @@ class ArtistRadar:
             "Enter the name of your new playlist or an existing playlist (case sensitive):\n"
         )
 
-        if self.playlist_exists(playlist_name):
+        if self.playlist_name_taken(playlist_name):
             for playlist in self.user_playlists["items"]:
                 if playlist["name"] == playlist_name:
                     radar_playlist_id = playlist["id"]
@@ -55,9 +108,9 @@ class ArtistRadar:
         # Update playlist.
         self.sp.playlist_replace_items(radar_playlist_id, most_recent_tracks)
 
-    def playlist_exists(self, playlist_name):
+    def playlist_name_taken(self, playlist_name):
         """
-        Check whether the playlist is an existing user playlist.
+        Check whether the playlist name is taken.
 
         :param playlist_name: Name of the playlist
         :return: Boolean for whether the playlist exists
