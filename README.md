@@ -20,3 +20,4 @@
 - Flask
 - Firebase
 - Svelte
+- TypeScript
