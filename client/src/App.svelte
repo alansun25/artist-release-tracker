@@ -1,54 +1,54 @@
 <script lang="ts">
-    import svelteLogo from './assets/svelte.svg'
-    import Counter from './lib/Counter.svelte'
+    import Playlist from './lib/Playlist.svelte';
+    import Radar from './lib/Radar.svelte';
+    import Search from './lib/Search.svelte';
     import { onMount } from 'svelte';
 
-    let me = ''
-    let playlists = []
+    let loggedIn = false
+    // let me = ''
+    // let playlists = []
 
-    onMount(async() => {
-        await getUserPlaylists()
-        await getUser()
-    })
+    // onMount(async() => {
+    //     await getUserPlaylists()
+    //     await getUser()
+    // })
 
-    async function getUser() {
-      let response = await fetch('./user', {
-        method: 'GET'
-      })
+    // async function getUser() {
+    //   let response = await fetch('./user', {
+    //     method: 'GET'
+    //   })
 
-      let result = await response;
-      result.text().then(text => (me = text))
-    }
+    //   let result = await response;
+    //   result.text().then(text => (me = text))
+    // }
 
-    async function getUserPlaylists() {
-        let response = await fetch('./playlists', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+    // async function getUserPlaylists() {
+    //     let response = await fetch('./playlists', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
 
-        let result = await response.json()
-        playlists = result.playlists.items
-    }
-  </script>
+    //     let result = await response.json()
+    //     playlists = result.playlists.items
+    // }
+</script>
   
-  <main>
-    <div>
-      <a href="https://vitejs.dev" target="_blank"> 
-        <img src="/vite.svg" class="logo" alt="Vite Logo" />
-      </a>
-      <a href="https://svelte.dev" target="_blank"> 
-        <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-      </a>
+<main>
+    <header>
+        <h1>Spotify Artist Radar</h1>
+        <h2>Settings</h2>
+    </header>
+    <div class="content">
+        <Radar/>
+        <Playlist/>
     </div>
-    <h1>Vite + Svelte</h1>
-  
-    <div class="card">
-      <Counter />
-    </div>
-  
-    <div class="card">
+    <footer>
+        <h3>Made with &#128154; by <a href="https://www.linkedin.com/in/alansun25/" target="_blank">Alan Sun</a></h3>
+        <h3><a href="https://github.com/alansun25/spotify-artist-radar" target="_blank">View Source Code</a></h3>
+    </footer>
+    <!-- <div class="card">
         <p>test</p>
         <p>User ID: {me}</p>
     </div>
@@ -60,30 +60,43 @@
             <li>{playlist.name}</li>
             {/each}
         </ul>
-    </div>
-
-    <p>
-      Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank">SvelteKit</a>, the official Svelte app framework powered by Vite!
-    </p>
+    </div> -->
+</main>
   
-    <p class="read-the-docs">
-      Click on the Vite and Svelte logos to learn more
-    </p>
-  </main>
-  
-  <style>
-    .logo {
-      height: 6em;
-      padding: 1.5em;
-      will-change: filter;
+<style>
+    main {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
     }
-    .logo:hover {
-      filter: drop-shadow(0 0 2em #646cffaa);
+    h2 {
+        transition: color 0.25s;
     }
-    .logo.svelte:hover {
-      filter: drop-shadow(0 0 2em #ff3e00aa);
+    h2:hover {
+        cursor: pointer;
+        color: #0bc84d;
     }
-    .read-the-docs {
-      color: #888;
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: fit-content;
+        padding: 0 2em;
     }
-  </style>
+    .content {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+</style>
