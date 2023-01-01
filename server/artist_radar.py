@@ -5,8 +5,8 @@ from models.radar_playlist import RadarPlaylist
 
 
 class ArtistRadar:
-    def __init__(self, access_token, db):
-        self.sp = spotipy.Spotify(access_token)
+    def __init__(self, sp: spotipy.Spotify, db):
+        self.sp = sp
         self.user = self.sp.current_user()
         self.user_playlists = self.sp.user_playlists(self.user["id"])
         
@@ -16,10 +16,9 @@ class ArtistRadar:
         doc = self.user_doc.get()
         if doc.exists:
             self.radar_playlist = RadarPlaylist.from_dict(self.user_doc.get().to_dict())
-            
-            # If the user deleted the playlist at some point, 
-            # recreate it and rewrite the old data
             if not self.playlist_exists(self.radar_playlist.id):
+                # If the user deleted the playlist at some point, 
+                # recreate it and rewrite the old data
                 self.create_radar_playlist()
             else:
                 self.tracked_artists = self.radar_playlist.tracked_artists_ids
@@ -54,9 +53,29 @@ class ArtistRadar:
         
         artists = []
         for res in search_results:
-            artists.append(Artist(res["id"], res["name"], res["images"][0]))
+            artists.append(Artist(
+                res["id"], 
+                res["name"], 
+                res["images"][0]["url"], 
+                res["followers"]["total"],
+                res["genres"]
+            ).to_dict())
         
         return artists
+
+    def get_tracked_artists_info(self):
+        artist_data = []
+        for artist_id in self.tracked_artists:
+            artist = self.sp.artist(artist_id)
+            artist_data.append(Artist(
+                artist["id"], 
+                artist["name"], 
+                artist["images"][0]["url"], 
+                artist["followers"]["total"],
+                artist["genres"]
+            ).to_dict())
+            
+        return artist_data
     
     def playlist_exists(self, playlist_id):
         for playlist in self.user_playlists["items"]:
@@ -64,7 +83,10 @@ class ArtistRadar:
                 return True
 
         return False
-
+    
+    
+    ### OLD ###
+    
     def create_playlist(self):
         """
         Create the user's artist radar playlist.

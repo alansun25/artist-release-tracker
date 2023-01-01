@@ -1,5 +1,6 @@
 import jsonpickle
 import os
+import spotipy
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -27,14 +28,17 @@ def get_token_data(code, state):
     
     return token
 
-# Returns None if token has not expired
 def check_token_status(token):
     # Note: Spotify access tokens have a lifetime of 1 hour
     if AUTH.is_token_expired(token):
         token = AUTH.refresh_access_token(token['refresh_token'])
         return token
     
+    # Returns None if token has not expired
     return None
+
+def get_spotify_client(access_token):
+    return spotipy.Spotify(access_token)
 
 def to_json(obj):
     return jsonpickle.encode(obj)
