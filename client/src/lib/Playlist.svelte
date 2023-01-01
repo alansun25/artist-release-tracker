@@ -1,8 +1,12 @@
-<script lang="ts"></script>
+<script lang="ts">
+    import Song from "./Song.svelte";
+
+    // export let playlist_uri
+</script>
 
 <main class="col-group">
     <div class="heading">
-        <h1>Newest Releases</h1>
+        Newest Releases
         <div class="actions">
             <svg xmlns="http://www.w3.org/2000/svg" 
                 class="icon icon-tabler icon-tabler-refresh" 
@@ -27,15 +31,20 @@
                     <path d="M9 15c1.5 -1 4 -1 5 .5" />
                     <path d="M7 9c2 -1 6 -2 10 .5" />
                   </svg>
-                  &nbsp;Open in Spotify
+                  &nbsp;Spotify
             </button>
         </div>
     </div>
-    <div class="col">Playlist</div>
+    <div class="col">
+        <Song/>
+        <Song/>
+        <Song/>
+    </div>
 </main>
 
 <style>
     .icon-tabler-refresh {
+        margin-right: .5em;
         transition: stroke 0.25s;
     }
     .icon-tabler-refresh:hover {

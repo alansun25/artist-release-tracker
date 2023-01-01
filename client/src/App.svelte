@@ -1,16 +1,14 @@
 <script lang="ts">
     import Playlist from './lib/Playlist.svelte';
     import Radar from './lib/Radar.svelte';
-    import Search from './lib/Search.svelte';
     import { onMount } from 'svelte';
 
-    let loggedIn = false
     // let me = ''
     // let playlists = []
 
     // onMount(async() => {
     //     await getUserPlaylists()
-    //     await getUser()
+    //     // await getUser()
     // })
 
     // async function getUser() {
@@ -32,13 +30,15 @@
 
     //     let result = await response.json()
     //     playlists = result.playlists.items
+    //     console.log("PLAYLISTS", playlists, typeof(playlists))
     // }
 </script>
   
 <main>
     <header>
         <h1>Spotify Artist Radar</h1>
-        <h2>Settings</h2>
+        <!-- Next to profile add the user's profile pic -->
+        <h2>Profile</h2>
     </header>
     <div class="content">
         <Radar/>
@@ -46,7 +46,7 @@
     </div>
     <footer>
         <h3>Made with &#128154; by <a href="https://www.linkedin.com/in/alansun25/" target="_blank">Alan Sun</a></h3>
-        <h3><a href="https://github.com/alansun25/spotify-artist-radar" target="_blank">View Source Code</a></h3>
+        <h3><a href="https://github.com/alansun25/spotify-artist-radar" target="_blank">View Source Code</a></h3>    
     </footer>
     <!-- <div class="card">
         <p>test</p>
@@ -96,7 +96,13 @@
     }
     footer {
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: fit-content;
+        padding: 0 2em;
     }
 </style>

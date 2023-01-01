@@ -1,14 +1,36 @@
 <script lang="ts">
-    // Tracked artists
-    
-    // Will have an "Add artists" button at the top that will 
-    // open the search component (as a dialog?)
+    import Artist from "./Artist.svelte";
+    import Loader from "./Loader.svelte";
+    import { onMount } from "svelte";
+
+    let loaded = false
+    let tracked_artists = []
+
+    onMount(async() => {
+        // Fetch tracked artists
+        await getTrackedArtists()
+
+        // TODO: Fetch Radar playlist details
+    })
+
+    async function getTrackedArtists() {
+        let response = await fetch('./tracked_artists', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        let result = await response.json()
+        tracked_artists = result.artists
+        loaded = true
+    }
 </script>
 
 <main class="col-group">
     <div class="heading">
-        <h1>Selected Artists</h1>
-        <button>
+        Artist Radar
+        <button on:click={/* TODO: Open artist search */ null}>
             <svg xmlns="http://www.w3.org/2000/svg" 
                 class="icon icon-tabler icon-tabler-plus" 
                 width="24" height="24" viewBox="0 0 24 24" 
@@ -21,5 +43,27 @@
             &nbsp;Add Artists
         </button>
     </div>
-    <div class="col radar">Radar</div>
+    <div class="col">
+        {#if loaded}
+            {#each tracked_artists as artist}
+                <Artist 
+                    name={artist.name}
+                    image={artist.image} 
+                    num_followers={artist.num_followers}
+                    genres={artist.genres}
+                />
+            {/each}
+        {:else}
+            <div class="center"><Loader/></div>
+        {/if}
+    </div>
 </main>
+
+<style>
+    .center {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

@@ -51,7 +51,7 @@ h3 {
 
 .col-group {
     height: 75%;
-    width: 30%;
+    width: 25%;
     margin: 0 2em;
     display: flex;
     flex-direction: column;
@@ -60,13 +60,23 @@ h3 {
 
 .col {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 100%;
     width: 100%;
+    box-sizing: border-box;
+    padding: 0.5em 1em;
     background: inherit;
     border-radius: 15px;
     box-shadow: 8px 8px 10px 1px rgb(10, 10, 10), inset 0 0 2000px rgba(66, 66, 66, 0.301);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.col::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 
 #app {
@@ -105,10 +115,72 @@ button:active {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    padding-bottom: 0.5em;
 }
+
 .actions {
-    width: 40%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0.5em;
+    background-color: #191414;
+    width: 100%;
+    height: fit-content;
+    margin: 0.5em;
+    box-shadow: 0 0 2px 1px rgb(29, 185, 84, 0.25);
+    border-radius: 8px;
+    transition: background-color 0.25s;
+}
+
+.card:hover {
+    background-color: #181818;
+    cursor: pointer;
+}
+
+.img-container {
+    height: 75px;
+    width: 75px;
+    margin-right: 0.5em;
+}
+
+.card img {
+    height: 75px;
+    width: 75px;
+    object-fit: cover;
+}
+
+.card-info-layout {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.name {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.card-subtext {
+    font-style: italic;
+}
+
+.tag {
+    color: #888
 }
