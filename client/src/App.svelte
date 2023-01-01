@@ -1,37 +1,6 @@
 <script lang="ts">
     import Playlist from './lib/Playlist.svelte';
     import Radar from './lib/Radar.svelte';
-    import { onMount } from 'svelte';
-
-    // let me = ''
-    // let playlists = []
-
-    // onMount(async() => {
-    //     await getUserPlaylists()
-    //     // await getUser()
-    // })
-
-    // async function getUser() {
-    //   let response = await fetch('./user', {
-    //     method: 'GET'
-    //   })
-
-    //   let result = await response;
-    //   result.text().then(text => (me = text))
-    // }
-
-    // async function getUserPlaylists() {
-    //     let response = await fetch('./playlists', {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-
-    //     let result = await response.json()
-    //     playlists = result.playlists.items
-    //     console.log("PLAYLISTS", playlists, typeof(playlists))
-    // }
 </script>
   
 <main>
@@ -48,19 +17,6 @@
         <h3>Made with &#128154; by <a href="https://www.linkedin.com/in/alansun25/" target="_blank">Alan Sun</a></h3>
         <h3><a href="https://github.com/alansun25/spotify-artist-radar" target="_blank">View Source Code</a></h3>    
     </footer>
-    <!-- <div class="card">
-        <p>test</p>
-        <p>User ID: {me}</p>
-    </div>
-
-    <div>
-        <h2>List of playlist names</h2>
-        <ul>
-            {#each playlists as playlist}
-            <li>{playlist.name}</li>
-            {/each}
-        </ul>
-    </div> -->
 </main>
   
 <style>

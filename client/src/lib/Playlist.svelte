@@ -1,7 +1,31 @@
 <script lang="ts">
-    import Song from "./Song.svelte";
+    import Loader from "./Loader.svelte";
+    import Track from "./Track.svelte";
+    import { onMount } from "svelte";
 
-    // export let playlist_uri
+    let radar_playlist
+    let loaded = false
+
+    onMount(async() => {
+        await getRadarPlaylist()
+    })
+
+    async function getRadarPlaylist() {
+        let response = await fetch('./radar_playlist_tracks', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        let result = await response.json()
+        radar_playlist = result.radar_playlist
+        loaded = true
+    }
+
+    function open_url(url) {
+        window.open(url, '_blank')
+    }
 </script>
 
 <main class="col-group">
@@ -17,9 +41,7 @@
                 <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
             </svg>
-            <!-- TODO: Wrap this button in an <a> tag with the link
-                leading to the generated Spotify Artist Radar playlist -->
-            <button>
+            <button on:click={() => open_url(radar_playlist.url)}>
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="icon icon-tabler icon-tabler-brand-spotify" 
                     width="24" height="24" viewBox="0 0 24 24" 
@@ -36,9 +58,18 @@
         </div>
     </div>
     <div class="col">
-        <Song/>
-        <Song/>
-        <Song/>
+        {#if loaded}
+            {#each radar_playlist.tracks as track}
+                <Track 
+                    url={track.url}
+                    image={track.image}
+                    name={track.name}
+                    artists={track.artists}
+                />
+            {/each}
+        {:else}
+            <div class="center"><Loader/></div>
+        {/if}
     </div>
 </main>
 

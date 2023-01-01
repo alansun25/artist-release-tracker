@@ -7,10 +7,7 @@
     let tracked_artists = []
 
     onMount(async() => {
-        // Fetch tracked artists
         await getTrackedArtists()
-
-        // TODO: Fetch Radar playlist details
     })
 
     async function getTrackedArtists() {
@@ -47,7 +44,7 @@
         {#if loaded}
             {#each tracked_artists as artist}
                 <Artist 
-                    id={artist.id}
+                    url={artist.url}
                     name={artist.name}
                     image={artist.image} 
                     num_followers={artist.num_followers}
@@ -59,12 +56,3 @@
         {/if}
     </div>
 </main>
-
-<style>
-    .center {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-</style>

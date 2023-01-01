@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let id
+    export let url
     export let name
     export let image
     export let num_followers
@@ -14,13 +14,12 @@
         genres_string = 'n/a'
     }
 
-    function open_uri() {
-        window.open(`https://open.spotify.com/artist/${id}`, '_blank')
+    function open_url() {
+        window.open(url, '_blank')
     }
-    
 </script>
 
-<main class="card" on:click={() => open_uri()}>
+<main class="card" on:click={() => open_url()}>
     <div class="img-container">
         <img src={image} alt=""/>
     </div>
@@ -46,6 +45,9 @@
 </main>
 
 <style>
+    .card:hover {
+        cursor: pointer;
+    }
     .card img {
         border-radius: 100%;
     }
