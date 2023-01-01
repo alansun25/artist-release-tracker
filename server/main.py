@@ -3,7 +3,7 @@ from init.spotify import initialize_spotify_client
 from init.firebase import initialize_firebase_db
 from artist_radar import ArtistRadar
 
-
+# Script-only version
 def main():
     load_dotenv()
 

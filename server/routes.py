@@ -13,7 +13,6 @@ DB = initialize_firebase_db()
 @app.route("/")
 def root():
     if 'token' not in session:
-        #return redirect('/authorize')
         return render_template('login.html')
         
     return send_from_directory('../client/dist', 'index.html')
@@ -31,9 +30,8 @@ def authorize():
 def callback():
     code = request.args.get('code')
     state = request.args.get('state')
-    token_data = get_token_data(code, state)
-    
-    # TODO: Handle when token data not returned due to state conflict
+    token_data = get_token_data(code)
+
     session['token'] = token_data
     session['access_token'] = token_data['access_token']
     
@@ -71,27 +69,17 @@ def get_radar_playlist():
 #     if refresh_token:
 #         session['token'] = refresh_token
 
-# @app.route('/user', methods=['GET'])
-# def user():
-#     refresh_token = check_token_status(session['token'])
-#     if refresh_token:
-#         session['token'] = refresh_token
-#         session['spotify'] = to_json(spotify(session['access_token']))
+@app.route('/user', methods=['GET'])
+def user():
+    refresh_token = check_token_status(session['token'])
+    if refresh_token:
+        session['token'] = refresh_token
+        session['access_token'] = refresh_token['access_token']
     
-#     sp = to_object(session['spotify'])
-#     user = sp.current_user()
-#     return user['id']
-
-# @app.route('/playlists', methods=['GET'])
-# def playlists():
-#     refresh_token = check_token_status(session['token'])
-#     if refresh_token:
-#         session['token'] = refresh_token
-#         session['access_token'] = refresh_token['access_token']
+    sp = get_spotify_client(session['access_token'])
+    user = sp.current_user()
     
-#     sp = get_spotify_client(session['access_token'])
-#     playlists = sp.current_user_playlists()
-#     return {'playlists': playlists}
+    return {'name': user['display_name'], 'image': user["images"][0]["url"]}
     
 if __name__ == "__main__":
     app.run(debug=True)

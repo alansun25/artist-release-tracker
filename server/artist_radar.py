@@ -90,7 +90,12 @@ class ArtistRadar:
                 artists.append({"name": artist["name"], "url": artist["external_urls"]["spotify"]})
             
             tracks.append(Track(
-                track["external_urls"]["spotify"], track["name"], artists, track["album"]["images"][0]["url"]
+                track["external_urls"]["spotify"], 
+                track["name"], 
+                track["album"]["name"], 
+                track["album"]["external_urls"]["spotify"], 
+                artists, 
+                track["album"]["images"][0]["url"]
             ).to_dict())
         
         return PlaylistData(playlist["external_urls"]["spotify"], tracks).to_dict()

@@ -17,11 +17,7 @@ AUTH = SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, R_URI, STATE, SCOPE)
 def get_auth_url():
     return AUTH.get_authorize_url()
 
-def get_token_data(code, state):    
-    if state != AUTH.state:
-        # TODO: Handle state validation
-        pass
-    
+def get_token_data(code):
     token = AUTH.get_cached_token()
     if not token:
         token = AUTH.get_access_token(code)

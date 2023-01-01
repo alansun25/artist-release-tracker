@@ -1,9 +1,11 @@
 import json
 
 class Track:
-    def __init__(self, url, name, artists, image):
+    def __init__(self, url, name, album, album_url, artists, image):
         self.url = url
         self.name = name
+        self.album = album
+        self.album_url = album_url
         self.artists = artists
         self.image = image
 
