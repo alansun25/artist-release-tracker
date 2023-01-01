@@ -1,5 +1,5 @@
 <script lang="ts">
-    // export let artist_uri
+    export let id
     export let name
     export let image
     export let num_followers
@@ -13,11 +13,14 @@
     } else {
         genres_string = 'n/a'
     }
+
+    function open_uri() {
+        window.open(`https://open.spotify.com/artist/${id}`, '_blank')
+    }
     
 </script>
 
-<!-- TODO: Make card clickable and open specific artist on Spotify -->
-<main class="card">
+<main class="card" on:click={() => open_uri()}>
     <div class="img-container">
         <img src={image} alt=""/>
     </div>

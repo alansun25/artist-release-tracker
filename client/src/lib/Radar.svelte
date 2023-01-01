@@ -47,6 +47,7 @@
         {#if loaded}
             {#each tracked_artists as artist}
                 <Artist 
+                    id={artist.id}
                     name={artist.name}
                     image={artist.image} 
                     num_followers={artist.num_followers}
