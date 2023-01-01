@@ -64,6 +64,8 @@
                     url={track.url}
                     image={track.image}
                     name={track.name}
+                    album={track.album}
+                    album_url={track.album_url}
                     artists={track.artists}
                 />
             {/each}

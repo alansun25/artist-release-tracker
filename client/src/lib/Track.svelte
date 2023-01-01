@@ -2,6 +2,8 @@
     export let url
     export let image
     export let name
+    export let album
+    export let album_url
     export let artists
 
     let num_artists = artists.length
@@ -26,23 +28,20 @@
                     {/if}
                 {/each}
             </div>
-            
+            <div class="card-subtext"><a class="tag" href={album_url} target="_blank">{album}</a></div>
         </div>
     </div>
 </main>
 
 <style>
+    img {
+        border-radius: 8px;
+    }
     .card:hover {
         cursor: auto;
     }
-    .card-subtext {
-        font-size: 1em;
-    }
     a {
         text-decoration: none;
-    }
-    a:hover {
-        text-decoration: underline;
     }
     .name {
         color: #fff;
@@ -50,7 +49,6 @@
     }
     .name:hover {
         cursor: pointer;
-        text-decoration: underline;
-        color: rgb(172, 172, 172)
+        color: #0bc84d;
     }
 </style>
