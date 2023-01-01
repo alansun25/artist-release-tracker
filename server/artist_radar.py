@@ -1,8 +1,9 @@
 import spotipy
 from datetime import datetime
 from models.artist import Artist
+from models.playlist_data import PlaylistData
 from models.radar_playlist import RadarPlaylist
-
+from models.track import Track
 
 class ArtistRadar:
     def __init__(self, sp: spotipy.Spotify, db):
@@ -54,7 +55,7 @@ class ArtistRadar:
         artists = []
         for res in search_results:
             artists.append(Artist(
-                res["id"], 
+                res["external_urls"]["spotify"], 
                 res["name"], 
                 res["images"][0]["url"], 
                 res["followers"]["total"],
@@ -68,7 +69,7 @@ class ArtistRadar:
         for artist_id in self.tracked_artists:
             artist = self.sp.artist(artist_id)
             artist_data.append(Artist(
-                artist["id"], 
+                artist["external_urls"]["spotify"], 
                 artist["name"], 
                 artist["images"][0]["url"], 
                 artist["followers"]["total"],
@@ -76,6 +77,23 @@ class ArtistRadar:
             ).to_dict())
             
         return artist_data
+    
+    def get_radar_playlist_tracks(self):
+        playlist = self.sp.playlist(self.radar_playlist.id)
+        
+        tracks = []
+        for track_item in playlist["tracks"]["items"]:
+            track = track_item["track"]
+            
+            artists = []
+            for artist in track["artists"]:
+                artists.append({"name": artist["name"], "url": artist["external_urls"]["spotify"]})
+            
+            tracks.append(Track(
+                track["external_urls"]["spotify"], track["name"], artists, track["album"]["images"][0]["url"]
+            ).to_dict())
+        
+        return PlaylistData(playlist["external_urls"]["spotify"], tracks).to_dict()
     
     def playlist_exists(self, playlist_id):
         for playlist in self.user_playlists["items"]:

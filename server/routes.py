@@ -49,9 +49,21 @@ def get_tracked_artists():
     sp = get_spotify_client(session['access_token'])
     artist_radar = ArtistRadar(sp, DB)
     artists = artist_radar.get_tracked_artists_info()
-    
-    # print(artist_radar.get_tracked_artists_info(), flush=True)
+
     return {'artists': artists} 
+
+@app.route('/radar_playlist_tracks', methods=['GET'])
+def get_radar_playlist():
+    refresh_token = check_token_status(session['token'])
+    if refresh_token:
+        session['token'] = refresh_token
+        session['access_token'] = refresh_token['access_token']
+    
+    sp = get_spotify_client(session['access_token'])
+    artist_radar = ArtistRadar(sp, DB)
+    radar_playlist = artist_radar.get_radar_playlist_tracks()
+    
+    return {'radar_playlist': radar_playlist}
 
 # @app.route('/search/<artist>')
 # def get_artist_search_results(artist):

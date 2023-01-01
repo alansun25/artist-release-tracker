@@ -1,6 +1,5 @@
 import json
 
-
 class RadarPlaylist:
     def __init__(self, id, name, tracked_artists_ids):
         self.id = id
