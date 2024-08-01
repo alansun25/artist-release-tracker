@@ -1,4 +1,4 @@
-# Spotify Artist Radar
+# Syncify
 
 *This project is in active development and subject to change.*
 
